@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+          
+    
+
+    <!-- bean definitions here -->
+
+    <bean id = "FlightDataSource" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value = "com.mysql.cj.jdbc.Driver"></property>
+      <property name="url" value = "jdbc:mysql://localhost:3306/Flight?useSSL=false"></property>        
+        <property name="username" value = "root"></property>
+        <property name="password" value = "hrhk"></property>
+    </bean>
+    
+    
+        
+   
+    
+    <bean id = "FlightSessionFactory" class ="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    	    <property name="dataSource" ref = "FlightDataSource"></property>
+    	    <property name="annotatedClasses">
+    	    	<list>
+    	    		<value>serviceDAO.Entity.Flight.AircraftEntity</value>
+    	    		<value>serviceDAO.Entity.Flight.AirportEntity</value>
+    	    		<value>serviceDAO.Entity.Flight.FlightEntity</value>
+    	    		<value>serviceDAO.Entity.Flight.RouteEntity</value>
+    	    		<value>serviceDAO.Entity.Flight.SeatConfigEntity</value>
+    	    		<value>serviceDAO.Entity.Flight.FlightMasterData</value>
+    	    		<value>serviceDAO.Entity.Flight.RouteMasterData</value>
+    	    	</list>
+    	    </property>
+    	    <property name="hibernateProperties">  
+            <props>  
+    	   	 	<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+    	   	 	<prop key="hibernate.hbm2ddl.auto">update</prop>  
+                <prop key="hibernate.show_sql">true</prop>  
+    	   	 </props>
+    	    </property>
+    </bean> 
+    	    
+    <bean id="FlightHTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">  
+    	<property name="sessionFactory" ref="FlightSessionFactory"></property>  
+    </bean>
+        
+     <bean id = "FlightDAO" class ="serviceDAO.hibernate.Flight.FlightDAO">
+    	    <property name="hibTemplate" ref = "FlightHTemplate"></property>
+    </bean>
+    
+     <bean id = "AircraftDAO" class ="serviceDAO.hibernate.Flight.AircraftDAO">
+    	    <property name="hibTemplate" ref = "FlightHTemplate"></property>
+    </bean>
+    
+     <bean id = "AirportDAO" class ="serviceDAO.hibernate.Flight.AirportDAO">
+    	    <property name="hibTemplate" ref = "FlightHTemplate"></property>
+    </bean>
+    
+     <bean id = "RouteDAO" class ="serviceDAO.hibernate.Flight.RouteDAO">
+    	    <property name="hibTemplate" ref = "FlightHTemplate"></property>
+    </bean>
+     <bean id = "SeatConfigDAO" class ="serviceDAO.hibernate.Flight.SeatConfigDAO">
+    	    <property name="hibTemplate" ref = "FlightHTemplate"></property>
+    </bean>
+
+    
+    
+     <bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator"></bean>  
+          
+    
+    
+</beans>

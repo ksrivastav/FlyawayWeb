@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+          
+    
+
+    <!-- bean definitions here -->
+
+    <bean id = "ReservationDataSource" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value = "com.mysql.cj.jdbc.Driver"></property>
+      <property name="url" value = "jdbc:mysql://localhost:3306/Reservation?useSSL=false"></property>        
+        <property name="username" value = "root"></property>
+        <property name="password" value = "hrhk"></property>
+    </bean>
+    
+    
+        
+   
+    
+    <bean id = "ReservationSessionFactory" class ="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    	    <property name="dataSource" ref = "ReservationDataSource"></property>
+    	    <property name="annotatedClasses">
+    	    	<list>
+    	    		<value>serviceDAO.Entity.Reservation.BookingStatusEntity</value>
+    	    		<value>serviceDAO.Entity.Reservation.ReservationEntity</value>
+    	    		<value>serviceDAO.Entity.Reservation.TravelerItineraryEntity</value>
+    	    		<value>serviceDAO.Entity.Reservation.TravelerItineraryStatusEntity</value>
+    	    	</list>
+    	    </property>
+    	    <property name="hibernateProperties">  
+            <props>  
+    	   	 	<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+    	   	 	<prop key="hibernate.hbm2ddl.auto">update</prop>  
+                <prop key="hibernate.show_sql">true</prop>  
+    	   	 </props>
+    	    </property>
+    </bean> 
+    	    
+    <bean id="ReservationHTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">  
+    	<property name="sessionFactory" ref="ReservationSessionFactory"></property>  
+    </bean>
+        
+     <bean id = "ReservationDAO" class ="serviceDAO.hibernate.Reservation.ReservationDAO">
+    	    <property name="hibTemplate" ref = "ReservationHTemplate"></property>
+    </bean>
+    
+     <bean id = "BookingStatusDAO" class ="serviceDAO.hibernate.Reservation.BookingStatusDAO">
+    	    <property name="hibTemplate" ref = "ReservationHTemplate"></property>
+    </bean>
+    
+     <bean id = "TravelerItineraryDAO" class ="serviceDAO.hibernate.Reservation.TravelerItineraryDAO">
+    	    <property name="hibTemplate" ref = "ReservationHTemplate"></property>
+    </bean>
+    
+     <bean id = "TravelerItineraryStatusDAO" class ="serviceDAO.hibernate.Reservation.TravelerItineraryStatusDAO">
+    	    <property name="hibTemplate" ref = "ReservationHTemplate"></property>
+    </bean>
+     
+    
+     <bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator"></bean>  
+          
+    
+    
+</beans>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+          
+    
+
+    <!-- bean definitions here -->
+
+    <bean id = "FlightDataSource" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value = "com.mysql.cj.jdbc.Driver"></property>
+      <property name="url" value = "jdbc:mysql://localhost:3306/Member?useSSL=false"></property>        
+        <property name="username" value = "root"></property>
+        <property name="password" value = "hrhk"></property>
+    </bean>
+    
+    
+        
+    <bean id = "MemberDataSource" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value = "com.mysql.cj.jdbc.Driver"></property>
+      <property name="url" value = "jdbc:mysql://localhost:3306/Member?useSSL=false"></property>        
+        <property name="username" value = "root"></property>
+        <property name="password" value = "hrhk"></property>
+    </bean>
+    
+    <bean id = "MemberSessionFactory" class ="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    	    <property name="dataSource" ref = "MemberDataSource"></property>
+    	    <property name="annotatedClasses">
+    	    	<list>
+    	    		<value>serviceDAO.Entity.Member.MemberAccountEntity</value>
+    	    		<value>serviceDAO.Entity.Member.AdminAccountEntity</value>
+    	    		<value>serviceDAO.Entity.Member.MemberAccountContactDetailEntity</value>
+    	    		<value>serviceDAO.Entity.Member.MemberAccountAddressEntity</value>
+    	    		<value>serviceDAO.Entity.Member.DocumentTypeEntity</value>
+    	    		<value>serviceDAO.Entity.Member.PassengerEntity</value>
+    	    	</list>
+    	    </property>
+    	    <property name="hibernateProperties">  
+            <props>  
+    	   	 	<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+    	   	 	<prop key="hibernate.hbm2ddl.auto">update</prop>  
+                <prop key="hibernate.show_sql">true</prop>  
+    	   	 </props>
+    	    </property>
+    </bean> 
+    	    
+    <bean id="MemberHTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">  
+    	<property name="sessionFactory" ref="MemberSessionFactory"></property>  
+    </bean>
+        
+     <bean id = "MemberDAO" class ="serviceDAO.hibernate.Member.MemberAccountDAO">
+    	    <property name="hibTemplate" ref = "MemberHTemplate"></property>
+    </bean>
+    
+    <bean id = "AdminAccountDAO" class ="serviceDAO.hibernate.Member.AdminAccountDAO">
+    	    <property name="hibTemplate" ref = "MemberHTemplate"></property>
+    </bean>
+    
+     <bean id = "MemberAccountContactDetailDAO" class ="serviceDAO.hibernate.Member.MemberAccountContactDetailDAO">
+    	    <property name="hibTemplate" ref = "MemberHTemplate"></property>
+    </bean>
+    
+     <bean id = "MemberAccountAddressDAO" class ="serviceDAO.hibernate.Member.MemberAccountAddressDAO">
+    	    <property name="hibTemplate" ref = "MemberHTemplate"></property>
+    </bean>
+    
+     <bean id = "PassengerDAO" class ="serviceDAO.hibernate.Member.PassengerDAO">
+    	    <property name="hibTemplate" ref = "MemberHTemplate"></property>
+    </bean>
+     <bean id = "DocumentTypeDAO" class ="serviceDAO.hibernate.Member.DocumentTypeDAO">
+    	    <property name="hibTemplate" ref = "MemberHTemplate"></property>
+    </bean>
+
+    
+    
+     <bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator"></bean>  
+          
+    
+    
+</beans>

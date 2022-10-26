@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+          
+    
+
+    <!-- bean definitions here -->
+
+    <bean id = "MasterDataSource" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value = "com.mysql.cj.jdbc.Driver"></property>
+      <property name="url" value = "jdbc:mysql://localhost:3306/MasterData?useSSL=false"></property>        
+        <property name="username" value = "root"></property>
+        <property name="password" value = "hrhk"></property>
+    </bean>
+    
+    
+        
+   
+    
+    <bean id = "MasterDataSessionFactory" class ="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    	    <property name="dataSource" ref = "MasterDataSource"></property>
+    	    <property name="annotatedClasses">
+    	    	<list>
+    	    		<value>serviceDAO.Entity.MasterData.CountryEntity</value>
+    	    		<value>serviceDAO.Entity.MasterData.CityEntity</value>
+    	    		
+    	    	</list>
+    	    </property>
+    	    <property name="hibernateProperties">  
+            <props>  
+    	   	 	<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+    	   	 	<prop key="hibernate.hbm2ddl.auto">update</prop>  
+                <prop key="hibernate.show_sql">true</prop>  
+    	   	 </props>
+    	    </property>
+    </bean> 
+    	    
+    <bean id="MasterDataHTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">  
+    	<property name="sessionFactory" ref="MasterDataSessionFactory"></property>  
+    </bean>
+        
+     <bean id = "CityDAO" class ="serviceDAO.hibernate.MasterData.CityDAO">
+    	    <property name="hibTemplate" ref = "MasterDataHTemplate"></property>
+    </bean>
+    
+     <bean id = "CountryDAO" class ="serviceDAO.hibernate.MasterData.CountryDAO">
+    	    <property name="hibTemplate" ref = "MasterDataHTemplate"></property>
+    </bean>
+  
+    
+    
+     <bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator"></bean>  
+          
+    
+    
+</beans>
